@@ -7,6 +7,8 @@ import RegisterPage from './page/auth/register';
 import HomePage from './page/seller/home';
 import LayoutClient from './components/layout/client.layout';
 import LayoutAdmin from './components/layout/admin.layout';
+import UserPage from './page/admin/user';
+import CategoryPage from './page/admin/category';
 
 const App = () => {
 
@@ -34,6 +36,14 @@ const App = () => {
           index: true,
           element: <DashboardPage />,
         },
+        {
+          path: 'users',
+          element: <UserPage />,
+        },
+        {
+          path: 'categories',
+          element: <CategoryPage />,
+        }
       ],
     },
     {
