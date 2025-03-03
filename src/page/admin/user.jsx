@@ -3,8 +3,7 @@ import { Button, Popconfirm } from 'antd';
 import { Space } from 'antd/lib';
 import React, { useRef, useState } from 'react'
 import ModalUser from '../../components/modal/modal.user';
-
-
+import { PlusOutlined } from '@ant-design/icons';
 
 const UserPage = () => {
 
@@ -30,8 +29,6 @@ const UserPage = () => {
       render: () => (
         <Space>
           <Button onClick={() => setIsModalOpen(true)}>Edit</Button>
-
-
           <Popconfirm
             placement='leftTop'
             title='Xác nhận xóa user'
@@ -40,7 +37,7 @@ const UserPage = () => {
             cancelText='Hủy'
           >
             <span style={{ cursor: 'pointer', margin: '0 10px' }}>
-              <Button>Delete</Button>
+              <Button >Delete</Button>
             </span>
           </Popconfirm>
         </Space>
@@ -53,7 +50,7 @@ const UserPage = () => {
 
   return (
     <>
-      <ProTable actionRef={ref}
+      <ProTable actionRef={ref}ư
         request={async () => {
           // Simulate an API call (replace with your actual API)
           const response = await fetch('https://jsonplaceholder.typicode.com/users');
@@ -73,6 +70,17 @@ const UserPage = () => {
         }}
         columns={columns}
         rowKey="id"
+        toolBarRender={() => {
+          return (
+            <Button
+              icon={<PlusOutlined />}
+              type='primary'
+              onClick={() => setIsModalOpen(true)}
+            >
+              Thêm mới
+            </Button>
+          );
+        }}
       />;
       <ModalUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </>
