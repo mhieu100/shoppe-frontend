@@ -1,22 +1,19 @@
 import { Row, Col, Card, Statistic } from 'antd';
 import { Pie, Line } from '@ant-design/charts';
 
-const DashboardPage = () => {
-  // Dữ liệu mẫu (bạn có thể thay bằng dữ liệu thực từ API)
+const HomePage = () => {
   const statsData = {
     orders: 1250,
     products: 85,
     reviews: 320,
   };
 
-  // Dữ liệu cho biểu đồ tròn
   const pieData = [
     { type: 'Tháng 1', value: 4000 },
     { type: 'Tháng 2', value: 5500 },
     { type: 'Tháng 3', value: 7000 },
   ];
 
-  // Dữ liệu cho biểu đồ đường
   const lineData = [
     { month: 'Th1', revenue: 4000 },
     { month: 'Th2', revenue: 5500 },
@@ -25,7 +22,6 @@ const DashboardPage = () => {
     { month: 'Th5', revenue: 8000 },
   ];
 
-  // Cấu hình biểu đồ tròn
   const pieConfig = {
     appendPadding: 10,
     data: pieData,
@@ -44,7 +40,6 @@ const DashboardPage = () => {
     interactions: [{ type: 'element-active' }],
   };
 
-  // Cấu hình biểu đồ đường
   const lineConfig = {
     data: lineData,
     xField: 'month',
@@ -119,4 +114,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default HomePage;

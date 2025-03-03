@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'antd';
 const ModalUser = (props) => {
-    const { isModalOpen, setIsModalOpen } = props;
+  const { isModalOpen, setIsModalOpen } = props;
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -16,7 +16,12 @@ const ModalUser = (props) => {
       <Button type="primary" onClick={showModal}>
         Open Modal
       </Button>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title="Basic Modal"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
