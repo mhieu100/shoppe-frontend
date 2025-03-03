@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { callFetchAccount } from '../../service/api.auth';
 
-
 // First, create the thunk
 export const fetchAccount = createAsyncThunk(
   'account/fetchAccount',

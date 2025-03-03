@@ -7,11 +7,14 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   AppstoreOutlined,
+  ProductOutlined,
+  OrderedListOutlined,
+  DiscordOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from 'antd';
 const { Header, Sider, Content } = Layout;
 
-const LayoutAdmin = () => {
+const LayoutSeller = () => {
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState('');
   useEffect(() => {
@@ -36,19 +39,29 @@ const LayoutAdmin = () => {
 
   const menuSidebar = [
     {
-      key: '/admin',
+      key: '/seller',
       icon: <AppstoreOutlined />,
-      label: <Link to="/admin">Dashboard</Link>,
+      label: <Link to="/seller">Dashboard</Link>,
     },
     {
-      key: '/admin/users',
-      icon: <UserOutlined />,
-      label: <Link to="/admin/users">User</Link>,
+      key: '/seller/product',
+      icon: <ProductOutlined />,
+      label: <Link to="/seller/product">Product</Link>,
     },
     {
-      key: '/admin/categories',
+      key: '/seller/reivew',
       icon: <UploadOutlined />,
-      label: <Link to="/admin/categories">Category</Link>,
+      label: <Link to="/seller/review">Reciew</Link>,
+    },
+    {
+      key: '/seller/order',
+      icon: <OrderedListOutlined />,
+      label: <Link to="/seller/order">Order</Link>,
+    },
+    {
+      key: '/seller/discount',
+      icon: <DiscordOutlined />,
+      label: <Link to="/seller/discount">Dsicount</Link>,
     },
   ];
 
@@ -115,4 +128,4 @@ const LayoutAdmin = () => {
     </Layout>
   );
 };
-export default LayoutAdmin;
+export default LayoutSeller;

@@ -1,12 +1,12 @@
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm } from 'antd';
 import { Space } from 'antd/lib';
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import ModalUser from '../../components/modal/modal.user';
 import { PlusOutlined } from '@ant-design/icons';
 
-const UserPage = () => {
 
+const UserPage = () => {
   const columns = [
     {
       title: 'Name',
@@ -29,12 +29,15 @@ const UserPage = () => {
       render: () => (
         <Space>
           <Button onClick={() => setIsModalOpen(true)}>Edit</Button>
+
+
+
           <Popconfirm
-            placement='leftTop'
-            title='Xác nhận xóa user'
-            description='Bạn có chắc chắn muốn xóa user này ?'
-            okText='Xác nhận'
-            cancelText='Hủy'
+            placement="leftTop"
+            title="Xác nhận xóa user"
+            description="Bạn có chắc chắn muốn xóa user này ?"
+            okText="Xác nhận"
+            cancelText="Hủy"
           >
             <span style={{ cursor: 'pointer', margin: '0 10px' }}>
               <Button >Delete</Button>
@@ -42,7 +45,7 @@ const UserPage = () => {
           </Popconfirm>
         </Space>
       ),
-    }
+    },
   ];
 
   const ref = useRef();
@@ -50,15 +53,20 @@ const UserPage = () => {
 
   return (
     <>
-      <ProTable actionRef={ref}ư
+
+      <ProTable
+        actionRef={ref}
+
         request={async () => {
           // Simulate an API call (replace with your actual API)
-          const response = await fetch('https://jsonplaceholder.typicode.com/users');
+          const response = await fetch(
+            'https://jsonplaceholder.typicode.com/users'
+          );
           const data = await response.json();
 
           // Return data in the format ProTable expects
           return {
-            data: data.map(user => ({
+            data: data.map((user) => ({
               id: user.id,
               name: user.name,
               age: Math.floor(Math.random() * 50) + 20, // Random age for demo
@@ -70,6 +78,7 @@ const UserPage = () => {
         }}
         columns={columns}
         rowKey="id"
+
         toolBarRender={() => {
           return (
             <Button
@@ -82,9 +91,10 @@ const UserPage = () => {
           );
         }}
       />;
+
       <ModalUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </>
-  )
-}
+  );
+};
 
-export default UserPage
+export default UserPage;
