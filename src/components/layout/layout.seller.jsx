@@ -49,9 +49,9 @@ const LayoutSeller = () => {
       label: <Link to="/seller/product">Product</Link>,
     },
     {
-      key: '/seller/reivew',
+      key: '/seller/review',
       icon: <UploadOutlined />,
-      label: <Link to="/seller/review">Reciew</Link>,
+      label: <Link to="/seller/review">Review</Link>,
     },
     {
       key: '/seller/order',

@@ -1,7 +1,7 @@
 import { Row, Col, Card, Statistic } from 'antd';
 import { Pie, Line } from '@ant-design/charts';
 
-const HomePage = () => {
+const SellerBoard = () => {
   const statsData = {
     orders: 1250,
     products: 85,
@@ -114,4 +114,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default SellerBoard;

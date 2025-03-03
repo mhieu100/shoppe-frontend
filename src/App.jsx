@@ -4,16 +4,18 @@ import NotFound from './components/share/not.found';
 import DashboardPage from './page/admin/dashboard';
 import LoginPage from './page/auth/login';
 import RegisterPage from './page/auth/register';
-import HomePage from './page/seller/index';
-import LayoutClient from './components/layout/client.layout';
-import LayoutAdmin from './components/layout/admin.layout';
+import HomePage from './page/customer/home';
+import LayoutAdmin from './components/layout/layout.admin';
 import UserPage from './page/admin/user';
 import CategoryPage from './page/admin/category';
-import LayoutSeller from './components/layout/seller.layout';
+import LayoutSeller from './components/layout/layout.seller';
 import ProductPage from './page/seller/product';
 import ReviewPage from './page/seller/review';
 import OrderPage from './page/seller/order';
 import DiscountPage from './page/seller/discount';
+import LayoutClient from './components/layout/layout.client';
+import SellerBoard from './page/seller/index';
+import ShopPage from './page/customer/shop';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -48,7 +50,7 @@ const App = () => {
       element: <LayoutSeller />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <HomePage /> },
+        { index: true, element: <SellerBoard /> },
         {
           path: 'product',
           element: <ProductPage />,
@@ -65,6 +67,16 @@ const App = () => {
           path: 'discount',
           element: <DiscountPage />,
         },
+      ],
+    },
+    {
+      path: '/',
+      element: <LayoutClient />,
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <HomePage /> },
+        { path: 'shop', element: <ShopPage /> },
+
       ],
     },
     {
