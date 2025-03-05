@@ -1,6 +1,6 @@
-import { RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { RightOutlined } from "@ant-design/icons";
 
 const Breadcrumbs = ({ prevLocation, title }) => {
   const location = useLocation();

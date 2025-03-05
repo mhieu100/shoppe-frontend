@@ -4,8 +4,7 @@ import { Image } from 'antd';
 import { Space } from 'antd/lib';
 import React, { useRef, useState } from 'react';
 import ModalProduct from '../../components/modal/modal.product';
-import { Flex, Tooltip } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+
 
 const ProductPage = () => {
   const columns = [

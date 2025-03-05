@@ -16,6 +16,9 @@ import DiscountPage from './page/seller/discount';
 import LayoutClient from './components/layout/layout.client';
 import SellerBoard from './page/seller/index';
 import ShopPage from './page/customer/shop';
+import CartPage from './page/customer/cart';
+import ProductDetail from './page/customer/product.detail';
+import Payment from './page/customer/payment';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -76,18 +79,21 @@ const App = () => {
       children: [
         { index: true, element: <HomePage /> },
         { path: 'shop', element: <ShopPage /> },
-
+        { path: 'cart' , element: <CartPage /> },
+        { path: 'product/:id', element: <ProductDetail /> },
+        { path: 'payment', element: <Payment /> },
+        {
+          path: '/login',
+          element: <LoginPage />,
+        },
+    
+        {
+          path: '/register',
+          element: <RegisterPage />,
+        },
       ],
     },
-    {
-      path: '/login',
-      element: <LoginPage />,
-    },
-
-    {
-      path: '/register',
-      element: <RegisterPage />,
-    },
+    
   ]);
 
   return <RouterProvider router={router} />;
