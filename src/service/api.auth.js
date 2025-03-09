@@ -17,8 +17,8 @@ export const callRegister = (
   });
 };
 
-export const callLogin = (username, password) => {
-  return axios.post('/auth/login', { username, password });
+export const callLogin = (email, password) => {
+  return axios.post('/auth/login', { email, password });
 };
 
 export const callFetchAccount = () => {
