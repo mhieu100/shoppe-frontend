@@ -5,15 +5,11 @@ import axios from './axios-customize';
 Module Auth
  */
 
-export const callRegister = (
-  fullname,
-  email,
-  password,
-) => {
+export const callRegister = (fullname, email, password) => {
   return axios.post('/auth/register', {
     fullname,
     email,
-    password
+    password,
   });
 };
 
@@ -32,4 +28,3 @@ export const callRefreshToken = () => {
 export const callLogout = () => {
   return axios.post('/auth/logout');
 };
-
