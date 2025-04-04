@@ -1,22 +1,34 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
   AppstoreOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from 'antd';
+import { Avatar, Button, Dropdown, Layout, Menu, message, Space, theme } from 'antd';
+import { callLogout } from '../../service/api.auth';
+import { setLogoutAction } from '../../redux/slice/accountSlide';
+import { useDispatch } from 'react-redux';
 const { Header, Sider, Content } = Layout;
 
 const LayoutAdmin = () => {
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setActiveMenu(location.pathname);
   }, [location]);
+
+  const handleLogout = async () => {
+    await callLogout();
+    dispatch(setLogoutAction({}));
+    message.success('Đăng xuất thành công');
+    navigate('/');
+  };
 
   const items = [
     {
@@ -30,7 +42,7 @@ const LayoutAdmin = () => {
     {
       key: 'logout',
       danger: true,
-      label: <label onClick={null}>Đăng xuất</label>,
+      label: <label onClick={handleLogout}>Đăng xuất</label>,
     },
   ];
 
