@@ -82,18 +82,18 @@ const App = () => {
         { path: 'cart' , element: <CartPage /> },
         { path: 'product/:id', element: <ProductDetail /> },
         { path: 'payment', element: <Payment /> },
-        {
-          path: '/login',
-          element: <LoginPage />,
-        },
-    
-        {
-          path: '/register',
-          element: <RegisterPage />,
-        },
+       
       ],
     },
-    
+    {
+      path: '/login',
+      element: <LoginPage />,
+    },
+
+    {
+      path: '/register',
+      element: <RegisterPage />,
+    },
   ]);
 
   return <RouterProvider router={router} />;
