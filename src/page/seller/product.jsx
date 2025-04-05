@@ -1,12 +1,90 @@
 import { ProTable } from '@ant-design/pro-components';
-import { Button, Popconfirm } from 'antd';
-import { Image } from 'antd';
-import { Space } from 'antd/lib';
-import React, { useRef, useState } from 'react';
+import { Button, Image, Carousel, Space, Popconfirm, App } from 'antd';
+import React, { useRef, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ModalProduct from '../../components/modal/modal.product';
-
+import { deleteProduct, fetchProducts } from '../../redux/slice/productSlice';
 
 const ProductPage = () => {
+  const dispatch = useDispatch();
+  const { products, loading } = useSelector((state) => state?.product);
+  const ref = useRef();
+  const { message: messageApi } = App.useApp();
+  const [open, setOpen] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [editProduct, setEditProduct] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Initial data fetch
+  useEffect(() => {
+    dispatch(fetchProducts({}));
+  }, [dispatch]);
+
+  // Update local state when Redux data changes
+  useEffect(() => {
+    if (products?.result) {
+      setTableData(products.result);
+    }
+  }, [products]);
+
+  const fetchData = async (params) => {
+    await dispatch(fetchProducts(params));
+    return {
+      data: products?.result || [],
+      success: true,
+      total: products?.result?.length || 0,
+    };
+  };
+
+  const handleEdit = (record) => {
+    setEditProduct(record);
+    setOpen(true);
+  };
+
+  const handleAdd = () => {
+    setEditProduct(null);
+    setOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (!id) return;
+
+    setDeleteLoading((prev) => ({ ...prev, [id]: true }));
+
+    try {
+      await dispatch(deleteProduct(id)).unwrap();
+
+      messageApi.success('Delete product successfully');
+      fetchData({});
+    } catch (err) {
+      messageApi.error('Failed to delete product');
+    }
+  };
+  const renderImages = (images) => {
+    if (!images || !Array.isArray(images) || images.length === 0) {
+      return (
+        <Image
+          width={80}
+          src="https://via.placeholder.com/150"
+          alt="No Image Available"
+        />
+      );
+    }
+
+    return (
+      <Carousel autoplay style={{ width: 80 }}>
+        {images.map((img) => (
+          <Image
+            key={img?.id || img?.url || Math.random()}
+            width={50}
+            src={img?.url}
+            alt="Product Image"
+          />
+        ))}
+      </Carousel>
+    );
+  };
+
   const columns = [
     {
       title: 'Name',
@@ -15,14 +93,15 @@ const ProductPage = () => {
     },
     {
       title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'descriptions',
+      key: 'descriptions',
+      ellipsis: true,
     },
     {
-      title: 'Image',
-      dataIndex: 'image',
-      key: 'image',
-      render: (image) => <Image width={50} src={image} alt="Product Image" />,
+      title: 'Images',
+      dataIndex: 'images',
+      key: 'images',
+      render: renderImages,
     },
     {
       title: 'Price',
@@ -36,83 +115,61 @@ const ProductPage = () => {
     },
     {
       title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
+      dataIndex: 'categoryName',
+      key: 'categoryName',
     },
     {
       title: 'Action',
-      key: 'action',
-      render: () => (
+      hiddenInSearch: true,
+      render: (_, record) => (
         <Space>
-          <Button onClick={() => setOpen(true)}>Edit</Button>
+          <Button onClick={() => handleEdit(record)}>Edit</Button>
+
           <Popconfirm
             placement="leftTop"
-            title="Xác nhận xóa sản phẩm"
+            title="Xác nhận xóa user"
+            description={`Bạn có chắc chắn muốn xóa ${record.name}?`}
+            onConfirm={() => handleDelete(record?.id)}
             okText="Xác nhận"
             cancelText="Hủy"
+            okButtonProps={{
+              danger: true,
+              loading: deleteLoading[record.id],
+            }}
           >
-            <Button danger>Delete</Button>
+            <span style={{ cursor: 'pointer', margin: '0 10px' }}>
+              <Button>Delete</Button>
+            </span>
           </Popconfirm>
         </Space>
       ),
     },
   ];
 
-  const ref = useRef();
-  const [open, setOpen] = useState(false);
-
-  const fetchData = async () => {
-    const data = [
-      {
-        id: 1,
-        name: 'Wireless Mouse',
-        description: 'A sleek and responsive wireless mouse.',
-        image: 'https://via.placeholder.com/150',
-        price: 25.99,
-        stockQuantity: 120,
-        category: 'Electronics',
-      },
-      {
-        id: 2,
-        name: 'Mechanical Keyboard',
-        description: 'A durable mechanical keyboard with RGB lighting.',
-        image: 'https://via.placeholder.com/150',
-        price: 89.99,
-        stockQuantity: 75,
-        category: 'Accessories',
-      },
-      {
-        id: 3,
-        name: 'Gaming Headset',
-        description: 'Noise-cancelling gaming headset with surround sound.',
-        image: 'https://via.placeholder.com/150',
-        price: 59.99,
-        stockQuantity: 50,
-        category: 'Audio',
-      },
-    ];
-
-    return {
-      data,
-      success: true,
-      total: data.length,
-    };
-  };
-
   return (
     <>
       <ProTable
         actionRef={ref}
         request={fetchData}
+        dataSource={tableData}
         columns={columns}
         rowKey="id"
+        loading={loading}
+        pagination={{
+          showSizeChanger: true,
+        }}
         toolBarRender={() => [
-          <Button key="add" type="primary" onClick={() => setOpen(true)}>
+          <Button key="add" type="primary" onClick={() => handleAdd()}>
             Add Product
           </Button>,
         ]}
       />
-      <ModalProduct isModalOpen={open} setIsModalOpen={setOpen} />
+      <ModalProduct
+        isModalOpen={open}
+        setIsModalOpen={setOpen}
+        onSuccess={() => fetchData({})}
+        editProduct={editProduct}
+      />
     </>
   );
 };

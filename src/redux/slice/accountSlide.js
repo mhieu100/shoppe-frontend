@@ -20,11 +20,7 @@ const initialState = {
     id: '',
     email: '',
     fullname: '',
-    address: '',
-    phone: '',
-    birthday: '',
-    centerName: '',
-    roleName: '',
+    roles: [],
   },
   activeMenu: 'home',
 };
@@ -42,12 +38,8 @@ export const accountSlice = createSlice({
       state.isLoading = false;
       state.user.id = action?.payload?.id;
       state.user.email = action.payload.email;
-      state.user.centerName = action.payload.centerName;
       state.user.fullname = action.payload.fullname;
-      state.user.address = action.payload.address;
-      state.user.phone = action.payload.phoneNumber;
-      state.user.birthday = action.payload.birthday;
-      state.user.roleName = action?.payload?.roleName;
+      state.user.roles = action?.payload?.roles;
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
@@ -60,8 +52,7 @@ export const accountSlice = createSlice({
         id: '',
         email: '',
         fullname: '',
-        centerName: '',
-        roleName: '',
+        roles: [],
       };
     },
     setRefreshTokenAction: (state, action) => {
@@ -84,11 +75,7 @@ export const accountSlice = createSlice({
         state.user.id = action?.payload?.user?.id;
         state.user.email = action.payload.user?.email;
         state.user.fullname = action.payload.user?.fullname;
-        state.user.centerName = action.payload.user?.centerName;
-        state.user.address = action.payload.user?.address;
-        state.user.phone = action.payload.user?.phoneNumber;
-        state.user.birthday = action.payload.user?.birthday;
-        state.user.roleName = action?.payload?.user?.roleName;
+        state.user.roles = action?.payload?.user?.roles;
       }
     });
 

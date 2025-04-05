@@ -5,20 +5,16 @@ import axios from './axios-customize';
 Module Auth
  */
 
-export const callRegister = (
-  fullname,
-  email,
-  password,
-) => {
+export const callRegister = (fullname, email, password) => {
   return axios.post('/auth/register', {
     fullname,
     email,
-    password
+    password,
   });
 };
 
-export const callLogin = (username, password) => {
-  return axios.post('/auth/login', { username, password });
+export const callLogin = (email, password) => {
+  return axios.post('/auth/login', { email, password });
 };
 
 export const callFetchAccount = () => {
@@ -32,4 +28,3 @@ export const callRefreshToken = () => {
 export const callLogout = () => {
   return axios.post('/auth/logout');
 };
-
