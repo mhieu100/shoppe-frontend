@@ -1,4 +1,4 @@
-import { Badge, Button, message, notification, Popconfirm, Space } from 'antd';
+import { Badge, Button, message, Popconfirm, Space } from 'antd';
 import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
@@ -166,11 +166,11 @@ const UserPage = () => {
       filter: '',
     };
 
-    if (clone.fullname) q.filter = `${sfLike('fullname', clone.fullname)}`;
-    if (clone.email) {
-      q.filter = clone.fullname
-        ? q.filter + ' and ' + `${sfLike('email', clone.email)}`
-        : `${sfLike('email', clone.email)}`;
+    if (clone.name) q.filter = `${sfLike('name', clone.name)}`;
+    if (clone.address) {
+      q.filter = clone.name
+        ? q.filter + ' and ' + `${sfLike('address', clone.address)}`
+        : `${sfLike('address', clone.address)}`;
     }
 
     if (!q.filter) delete q.filter;
@@ -178,12 +178,16 @@ const UserPage = () => {
     let temp = queryString.stringify(q);
 
     let sortBy = '';
-    if (sort && sort.fullname) {
-      sortBy =
-        sort.fullname === 'ascend' ? 'sort=fullname,asc' : 'sort=fullname,desc';
+    if (sort && sort.name) {
+      sortBy = sort.name === 'ascend' ? 'sort=name,asc' : 'sort=name,desc';
     }
-    if (sort && sort.email) {
-      sortBy = sort.email === 'ascend' ? 'sort=email,asc' : 'sort=email,desc';
+    if (sort && sort.address) {
+      sortBy =
+        sort.address === 'ascend' ? 'sort=address,asc' : 'sort=address,desc';
+    }
+    if (sort && sort.capacity) {
+      sortBy =
+        sort.capacity === 'ascend' ? 'sort=capacity,asc' : 'sort=capacity,desc';
     }
     temp = `${temp}&${sortBy}`;
 

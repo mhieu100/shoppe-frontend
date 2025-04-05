@@ -7,38 +7,22 @@ Module Category
 
 export const callCreateCategory = (
   name,
-  address,
-  phoneNumber,
-  capacity,
-  workingHours,
-  image
+  description
 ) => {
   return axios.post('/categories', {
     name,
-    address,
-    phoneNumber,
-    capacity,
-    workingHours,
-    image,
+    description
   });
 };
 
 export const callUpdateCategory = (
-  centerId,
+  id,
   name,
-  address,
-  phoneNumber,
-  capacity,
-  workingHours,
-  image
+  description
 ) => {
-  return axios.put(`/categories/${centerId}`, {
+  return axios.put(`/categories/${id}`, {
     name,
-    address,
-    phoneNumber,
-    capacity,
-    workingHours,
-    image,
+    description
   });
 };
 
