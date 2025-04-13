@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import { CheckSquareOutlined } from '@ant-design/icons';
 import { Col, Form, message, notification, Row } from 'antd';
@@ -174,6 +175,33 @@ const ModalUser = (props) => {
             )}
         </>
     );
+=======
+import React from 'react';
+import { Modal } from 'antd';
+const ModalUser = (props) => {
+  const { isModalOpen, setIsModalOpen } = props;
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <>
+      <Modal
+        title="Basic Modal"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+    </>
+  );
+>>>>>>> 2a1951521fbb88e17cf7c43b9407b5186dded4f2
 };
 
 export default ModalUser;
