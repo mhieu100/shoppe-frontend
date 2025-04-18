@@ -1,7 +1,21 @@
-import React from "react";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { cartApi } from '../../../service/api.cart';
+import { addToCart } from '../../../redux/slice/cartSlice';
 
 const ProductInfo = ({ productInfo }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const handleAddToCart = async () => {
+    try {
+      const response = await cartApi.addToCart(productInfo.id);
+      if (response.data) {
+        dispatch(addToCart(response.data));
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5">
       <h2 className="text-4xl font-semibold">{productInfo.productName}</h2>
@@ -9,22 +23,11 @@ const ProductInfo = ({ productInfo }) => {
       <p className="text-base text-gray-600">{productInfo.des}</p>
       <p className="text-sm">Be the first to leave a review.</p>
       <p className="font-medium text-lg">
-        <span className="font-normal">Colors:</span> {productInfo.color}
+        <span className="font-normal">Quantity:</span>{' '}
+        {productInfo.stockQuantity}
       </p>
       <button
-        // onClick={() =>
-        //   dispatch(
-        //     addToCart({
-        //       _id: productInfo.id,
-        //       name: productInfo.productName,
-        //       quantity: 1,
-        //       image: productInfo.img,
-        //       badge: productInfo.badge,
-        //       price: productInfo.price,
-        //       colors: productInfo.color,
-        //     })
-        //   )
-        // }
+        onClick={handleAddToCart}
         className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont"
       >
         Add to Cart

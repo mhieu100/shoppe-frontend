@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import Breadcrumbs from "../../components/client/props/breadcrumbs";
-import ProductsOnSale from "../../components/client/product-detail/product.onsale";
-import ProductInfo from "../../components/client/product-detail/product.info";
+import Breadcrumbs from '../../components/client/props/breadcrumbs';
+import ProductsOnSale from '../../components/client/product-detail/product.onsale';
+import ProductInfo from '../../components/client/product-detail/product.info';
 
 const ProductDetail = () => {
   const location = useLocation();
-  const [prevLocation, setPrevLocation] = useState("");
+  const [prevLocation, setPrevLocation] = useState('');
   const [productInfo, setProductInfo] = useState([]);
 
   useEffect(() => {
     setProductInfo(location.state.item);
     setPrevLocation(location.pathname);
   }, [location, productInfo]);
+
+  console.log('Product Info:', productInfo);
 
   return (
     <div className="w-full mx-auto border-b-[1px] border-b-gray-300">

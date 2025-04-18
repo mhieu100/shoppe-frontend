@@ -1,12 +1,14 @@
 import axios from './axios-customize';
 
 const gettAllProducts = async (params) => {
-  const { current, pageSize } = params;
+  const { current, pageSize, searchTerm } = params;
+
   try {
     const response = await axios.get(`/products`, {
       params: {
-        page: current,
         size: pageSize,
+        page: current,
+        searchTerm,
       },
     });
     return response.data;

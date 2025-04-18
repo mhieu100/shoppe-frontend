@@ -1,28 +1,45 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import Flex from "../designLayouts/Flex";
-import { Link, useNavigate } from "react-router-dom";
-import { paginationItems } from "../../constants";
-import { CaretDownOutlined, MenuFoldOutlined, SearchOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import Flex from '../designLayouts/Flex';
+import { Link, useNavigate } from 'react-router-dom';
+import { paginationItems } from '../../constants';
+import {
+  CaretDownOutlined,
+  MenuFoldOutlined,
+  SearchOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../../redux/slice/productSlice';
+import { current } from '@reduxjs/toolkit';
 
 const HeaderBottom = () => {
   // const products = useSelector((state) => state.orebiReducer.products);
-  const products = [{}, {}];
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.product);
+  const productss = [{}, {}];
   const [show, setShow] = useState(false);
   const [showUser, setShowUser] = useState(false);
   const navigate = useNavigate();
-  const ref = useRef();
+  const ref = useRef(null);
   useEffect(() => {
-    document.body.addEventListener("click", (e) => {
-      if (ref.current.contains(e.target)) {
+    const handleClick = (e) => {
+      if (ref.current && ref.current.contains(e.target)) {
         setShow(true);
       } else {
         setShow(false);
       }
-    });
-  }, [show, ref]);
+    };
 
-  const [searchQuery, setSearchQuery] = useState("");
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.body.removeEventListener('click', handleClick);
+    };
+  }, [show]);
+
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
 
@@ -31,13 +48,36 @@ const HeaderBottom = () => {
   };
 
   useEffect(() => {
-    const filtered = paginationItems.filter((item) =>
-      item.productName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery]);
+    const delayDebounce = setTimeout(() => {
+      if (searchQuery) {
+        dispatch(
+          fetchProducts({
+            current: 0,
+            pageSize: 10,
+            searchTerm: searchQuery,
+          })
+        );
+      }
+    });
 
+    return () => {
+      clearTimeout(delayDebounce);
+    };
+  }, [dispatch, searchQuery]);
 
+  // useEffect(() => {
+  //   const filtered = paginationItems.filter((item) =>
+  //     item.productName.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  //   setFilteredProducts(filtered);
+  // }, [searchQuery]);
+
+  useEffect(() => {
+    if (products?.result) {
+      console.log('products', products.result);
+      setFilteredProducts(products.result);
+    }
+  }, [searchQuery, products]);
 
   return (
     <div className="w-full bg-[#F5F5F3] relative">
@@ -96,31 +136,33 @@ const HeaderBottom = () => {
                   filteredProducts.map((item) => (
                     <div
                       onClick={() =>
-                        navigate(
-                          `/product/${item.productName
-                            .toLowerCase()
-                            .split(" ")
-                            .join("")}`,
-                          {
-                            state: {
-                              item: item,
+                        navigate(`/product/${item.id}`, {
+                          state: {
+                            item: {
+                              _id: item.id,
+                              img: item.images[0].url,
+                              productName: item.name,
+                              price: item.price,
+                              des: item.descriptions,
                             },
-                          }
-                        ) &
+                          },
+                        }) &
                         setShowSearchBar(true) &
-                        setSearchQuery("")
+                        setSearchQuery('')
                       }
-                      key={item._id}
+                      key={item.id}
                       className="max-w-[600px] h-28 bg-gray-100 mb-3 flex items-center gap-3"
                     >
-                      <img className="w-24" src={item.img} alt="productImg" />
+                      <img
+                        className="w-24"
+                        src={item.images[0].url}
+                        alt="images"
+                      />
                       <div className="flex flex-col gap-1">
-                        <p className="font-semibold text-lg">
-                          {item.productName}
-                        </p>
-                        <p className="text-xs">{item.des}</p>
+                        <p className="font-semibold text-lg">{item.name}</p>
+                        <p className="text-xs">{item.descriptions}</p>
                         <p className="text-sm">
-                          Price:{" "}
+                          Price:{' '}
                           <span className="text-primeColor font-semibold">
                             ${item.price}
                           </span>
@@ -165,7 +207,7 @@ const HeaderBottom = () => {
               <div className="relative">
                 <ShoppingCartOutlined />
                 <span className="absolute font-titleFont top-3 -right-2 text-xs w-4 h-4 flex items-center justify-center rounded-full bg-primeColor text-white">
-                  {products.length > 0 ? products.length : 0}
+                  {productss.length > 0 ? productss.length : 0}
                 </span>
               </div>
             </Link>

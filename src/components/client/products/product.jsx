@@ -1,14 +1,21 @@
-import React from "react";
+import React from 'react';
 
-import Image from "../../designLayouts/Image";
-import Badge from "./badge";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeftOutlined, HeartOutlined, ShoppingCartOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import Image from '../../designLayouts/Image';
+import Badge from './badge';
+import { useNavigate } from 'react-router-dom';
+import {
+  ArrowLeftOutlined,
+  HeartOutlined,
+  ShoppingCartOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons';
+import { cartApi } from '../../../service/api.cart';
+import { message } from 'antd';
 
 const Product = (props) => {
   const _id = props.productName;
   const idString = (_id) => {
-    return String(_id).toLowerCase().split(" ").join("");
+    return String(_id).toLowerCase().split(' ').join('');
   };
   const rootId = idString(_id);
 
@@ -20,6 +27,22 @@ const Product = (props) => {
         item: productItem,
       },
     });
+  };
+
+  const handleAddtoCart = async () => {
+    try {
+      const response = await cartApi.addToCart(props._id);
+      if (response.status == 200) {
+        message.success({
+          content: 'Product added to cart',
+          icon: <ShoppingCartOutlined />,
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      message.error('Failed to add product to cart');
+      console.error('Error adding to cart:', error);
+    }
   };
   return (
     <div className="w-full relative group">
@@ -35,29 +58,16 @@ const Product = (props) => {
             <li className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full">
               Compare
               <span>
-              <ArrowLeftOutlined />
+                <ArrowLeftOutlined />
               </span>
             </li>
             <li
-              onClick={() =>
-                // dispatch(
-                //   addToCart({
-                //     _id: props._id,
-                //     name: props.productName,
-                //     quantity: 1,
-                //     image: props.img,
-                //     badge: props.badge,
-                //     price: props.price,
-                //     colors: props.color,
-                //   })
-                // )
-                console.log("Add to cart")
-              }
+              onClick={handleAddtoCart}
               className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full"
             >
               Add to Cart
               <span>
-              <ShoppingCartOutlined />
+                <ShoppingCartOutlined />
               </span>
             </li>
             <li
@@ -66,13 +76,13 @@ const Product = (props) => {
             >
               View Details
               <span className="text-lg">
-              <UnorderedListOutlined />
+                <UnorderedListOutlined />
               </span>
             </li>
             <li className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full">
               Add to Wish List
               <span>
-              <HeartOutlined />
+                <HeartOutlined />
               </span>
             </li>
           </ul>

@@ -1,23 +1,25 @@
-import React, { useState } from "react";
-import ReactPaginate from "react-paginate";
-import { paginationItems } from "../../../constants";
-import Product from "../products/product";
+import React, { useState, useEffect } from 'react';
+import ReactPaginate from 'react-paginate';
+import Product from '../products/product';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../../../redux/slice/productSlice';
 
-const items = paginationItems;
 function Items({ currentItems }) {
   return (
     <>
       {currentItems &&
         currentItems.map((item) => (
-          <div key={item._id} className="w-full">
+          <div key={item.id} className="w-full">
             <Product
-              _id={item._id}
-              img={item.img}
-              productName={item.productName}
+              _id={item.id}
+              img={item.images?.[0]?.url || 'https://via.placeholder.com/150'} // Get first image or fallback
+              productName={item.name}
               price={item.price}
-              color={item.color}
-              badge={item.badge}
-              des={item.des}
+              stockQuantity={item.stockQuantity}
+              color="N/A" // Since color is not in API data
+              badge={false} // Since badge is not in API data
+              des={item.descriptions}
+              category={item.category}
             />
           </div>
         ))}
@@ -26,28 +28,43 @@ function Items({ currentItems }) {
 }
 
 const Pagination = ({ itemsPerPage }) => {
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
+  const dispatch = useDispatch();
+  const { products, isLoading } = useSelector((state) => state.product);
   const [itemOffset, setItemOffset] = useState(0);
   const [itemStart, setItemStart] = useState(1);
 
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
+  // Initial data fetch
+  useEffect(() => {
+    dispatch(
+      fetchProducts({
+        current: 1,
+        pageSize: itemsPerPage,
+      })
+    );
+  }, [dispatch, itemsPerPage]);
+
+  const items = products?.result || [];
   const endOffset = itemOffset + itemsPerPage;
-  //   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = items.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(items.length / itemsPerPage);
 
-  // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % items.length;
     setItemOffset(newOffset);
-    // console.log(
-    //   `User requested page number ${event.selected}, which is offset ${newOffset},`
-    // );
     setItemStart(newOffset);
+
+    // Fetch new page data
+    dispatch(
+      fetchProducts({
+        current: event.selected + 1,
+        pageSize: itemsPerPage,
+      })
+    );
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -69,7 +86,7 @@ const Pagination = ({ itemsPerPage }) => {
         />
 
         <p className="text-base font-normal text-lightText">
-          Products from {itemStart === 0 ? 1 : itemStart} to {endOffset} of{" "}
+          Products from {itemStart === 0 ? 1 : itemStart} to {endOffset} of{' '}
           {items.length}
         </p>
       </div>
